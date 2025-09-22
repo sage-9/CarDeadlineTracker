@@ -1,0 +1,118 @@
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using System.Windows;
+using CarDeadlineTracker.Data;
+using CarDeadlineTracker.Model;
+using CarDeadlineTracker.Views;
+
+namespace CarDeadlineTracker.ViewModels;
+
+public class MainViewModel : ViewModelBase
+{
+    private Car _selectedCar;
+
+    public ObservableCollection<Car> Cars { get; set; } = new ObservableCollection<Car>();
+    
+    public ICommand DeleteCarCommand { get; }
+    public ICommand AddCarCommand { get; }
+    public ICommand EditCarCommand { get; }
+
+    public Car SelectedCar
+    {
+        get => _selectedCar;
+        set
+        {
+            _selectedCar = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public MainViewModel()
+    {
+        AddCarCommand = new RelayCommand(AddCar);
+        EditCarCommand = new RelayCommand(EditCar, CanEditCar);
+        DeleteCarCommand = new RelayCommand(DeleteCar, CanEditCar);
+        LoadCars();
+    }
+
+    private void AddCar(object parameter)
+    {
+        // Create an instance of the new view (the add/edit window)
+        var addCarWindow = new AddEditCarView();
+    
+        // Create an instance of the new view model
+        var viewModel = new AddEditCarViewModel();
+    
+        // Set the view's DataContext to the new view model
+        addCarWindow.DataContext = viewModel;
+    
+        // Display the window as a modal dialog.
+        // This blocks the main window until the dialog is closed.
+        addCarWindow.ShowDialog();
+    
+        // When the dialog is closed, we need to refresh the list of cars.
+        // This ensures the new car appears in the main window.
+        LoadCars();
+    }
+    
+    
+
+    private void EditCar(object parameter)
+    {
+        if (SelectedCar == null) return;
+
+        var addCarWindow = new AddEditCarView();
+
+        // Pass the selected car instance to the new view model's constructor
+        var viewModel = new AddEditCarViewModel(SelectedCar);
+
+        addCarWindow.DataContext = viewModel;
+        addCarWindow.ShowDialog();
+
+        // Reload the list to reflect any changes
+        LoadCars();
+    }
+
+    private bool CanEditCar(object parameter)
+    {
+        return SelectedCar != null;
+    }
+    
+    private void DeleteCar(object parameter)
+    {
+        if (SelectedCar == null) return;
+
+        // Add a confirmation dialog for safety
+        var result = MessageBox.Show($"Are you sure you want to delete the car with number plate {SelectedCar.NumberPlate}?", 
+            "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                // The key part of the DELETE operation
+                dbContext.Cars.Remove(SelectedCar);
+                dbContext.SaveChanges();
+            }
+            // Refresh the UI list
+            LoadCars();
+        }
+    }
+
+
+    private void LoadCars()
+    {
+        using (var dbContext = new ApplicationDbContext())
+        {
+            if (dbContext.Database != null)
+            {
+                var cars = dbContext.Cars.ToList();
+                Cars.Clear();
+                foreach (var car in cars)
+                {
+                    Cars.Add(car);
+                }
+            }
+        }
+    }
+}

@@ -10,9 +10,11 @@ public class ApplicationDbContext:DbContext
     public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
     public DbSet<RepairLog> RepairLogs { get; set; }
 
+    private string path =@"C:\Users\AbdulrahmanLadipo\RiderProjects\CarDeadlineTracker\car_manager.db";
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=car_manager.db");
+        optionsBuilder.UseSqlite($"Data Source={path}");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
