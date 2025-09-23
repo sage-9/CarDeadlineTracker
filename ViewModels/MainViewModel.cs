@@ -1,23 +1,22 @@
 using System.Collections.ObjectModel;
-using System.Windows.Input;
 using System.Windows;
+using System.Windows.Input;
 using CarDeadlineTracker.Data;
-using CarDeadlineTracker.Model;
 using CarDeadlineTracker.Views;
 
 namespace CarDeadlineTracker.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private Car _selectedCar;
+    private Model.Car _selectedCar;
 
-    public ObservableCollection<Car> Cars { get; set; } = new ObservableCollection<Car>();
+    public ObservableCollection<Model.Car> Cars { get; set; } = new ObservableCollection<Model.Car>();
     
     public ICommand DeleteCarCommand { get; }
     public ICommand AddCarCommand { get; }
     public ICommand EditCarCommand { get; }
 
-    public Car SelectedCar
+    public Model.Car SelectedCar
     {
         get => _selectedCar;
         set
@@ -61,15 +60,16 @@ public class MainViewModel : ViewModelBase
     {
         if (SelectedCar == null) return;
 
-        var addCarWindow = new AddEditCarView();
-
-        // Pass the selected car instance to the new view model's constructor
-        var viewModel = new AddEditCarViewModel(SelectedCar);
-
-        addCarWindow.DataContext = viewModel;
-        addCarWindow.ShowDialog();
-
-        // Reload the list to reflect any changes
+        var carDetailsWindow = new CarDetailsView();
+    
+        // Pass the selected Car object to the new view model
+        var viewModel = new CarDetailsViewModel(SelectedCar);
+    
+        carDetailsWindow.DataContext = viewModel;
+    
+        carDetailsWindow.ShowDialog();
+    
+        // Refresh the main list to reflect any potential changes
         LoadCars();
     }
 

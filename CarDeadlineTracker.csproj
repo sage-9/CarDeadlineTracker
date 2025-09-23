@@ -11,6 +11,10 @@
     <ItemGroup>
       <Folder Include="Assets\" />
       <Folder Include="Services\" />
+      <Folder Include="ViewModels\Car\" />
+      <Folder Include="ViewModels\Document\" />
+      <Folder Include="ViewModels\Maintenance\" />
+      <Folder Include="ViewModels\Repair\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,6 +27,19 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Page Update="Views\AddEditMaintenanceView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
+      <Page Update="Views\AddEditRepairView.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
 
 </Project>

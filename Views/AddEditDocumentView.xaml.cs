@@ -2,11 +2,10 @@ using System.Windows;
 
 namespace CarDeadlineTracker.Views;
 
-public partial class AddEditCarView : Window
+public partial class AddEditDocumentView : Window
 {
-    public AddEditCarView()
+    public AddEditDocumentView()
     {
         InitializeComponent();
-        
     }
 }
