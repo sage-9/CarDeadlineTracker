@@ -14,6 +14,7 @@ public class MainViewModel : ViewModelBase
     
     public ICommand DeleteCarCommand { get; }
     public ICommand AddCarCommand { get; }
+    public ICommand ViewCarCommand { get; }
     public ICommand EditCarCommand { get; }
 
     public Model.Car SelectedCar
@@ -29,8 +30,9 @@ public class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         AddCarCommand = new RelayCommand(AddCar);
-        EditCarCommand = new RelayCommand(EditCar, CanEditCar);
+        ViewCarCommand = new RelayCommand(ViewCar, CanEditCar);
         DeleteCarCommand = new RelayCommand(DeleteCar, CanEditCar);
+        EditCarCommand = new RelayCommand(EditCar, CanEditCar);
         LoadCars();
     }
 
@@ -56,7 +58,7 @@ public class MainViewModel : ViewModelBase
     
     
 
-    private void EditCar(object parameter)
+    private void ViewCar(object parameter)
     {
         if (SelectedCar == null) return;
 
@@ -71,6 +73,21 @@ public class MainViewModel : ViewModelBase
     
         // Refresh the main list to reflect any potential changes
         LoadCars();
+    }
+
+    private void EditCar(object parameter)
+    {
+        if (SelectedCar == null) return;
+        var editCarWindow = new AddEditCarView();
+        var viewModel = new AddEditCarViewModel(SelectedCar);
+        
+        editCarWindow.DataContext = viewModel;
+        
+        editCarWindow.ShowDialog();
+        
+        LoadCars();
+        
+        
     }
 
     private bool CanEditCar(object parameter)

@@ -1,12 +1,12 @@
 namespace CarDeadlineTracker.Model;
 
-public class Document
+public class RenewalItem
 {
     public int Id { get; set; } // Primary key
-    public string DocumentName { get; set; }
-    public DateTime ExpirationDate { get; set; }
-    public DateTime RenewalDate { get; set; }
-    public decimal RenewalCost { get; set; }
+    public string   ItemName { get; set; }
+    public DateTime DateOfRenewal { get; set; }
+    public DateTime DateOfExpiry { get; set; }
+    public decimal  Cost { get; set; }
     public string Notes { get; set; }
 
     // Foreign key to the Car model

@@ -1,15 +1,21 @@
 <Window x:Class="CarDeadlineTracker.Views.AddEditRepairView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Add RepairLog" Height="300" Width="400">
+        Title="Add RepairLog" Height="350" Width="400">
     <Grid Margin="10">
         <StackPanel>
-            <Label Content="Repair Log Name:"/>
-            <TextBox Text="{Binding RepairLog.RepairType}"/>
-            <Label Content="Repair Date:"/>
-            <DatePicker SelectedDate="{Binding RepairLog.RepairDate}"/>
-            <Label Content="RepairDescription"/>
-            <TextBox Text="{Binding RepairLog.RepairDescription}"/>
+            
+            <Label Content="Repair Name:"/>
+            <TextBox Text="{Binding SelectedRepairLog.RepairName}"/>
+            
+            <Label Content="Date:"/>
+            <DatePicker SelectedDate="{Binding SelectedRepairLog.RepairDate}"/>
+            
+            <Label Content="Description"/>
+            <TextBox Text="{Binding SelectedRepairLog.RepairDescription}"/>
+            
+            <Label Content="Cost"/>
+            <TextBox Text="{Binding SelectedRepairLog.Cost}"/>
             
             <Label Content="Notes:"/>
             <TextBox Text="{Binding MaintenanceRecord.Notes}"/>

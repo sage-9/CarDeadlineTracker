@@ -1,23 +1,23 @@
-<Window x:Class="CarDeadlineTracker.Views.AddEditDocumentView"
+<Window x:Class="CarDeadlineTracker.Views.AddEditRenewalItemView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Add Document" Height="300" Width="400">
+        Title="Add RenewalItem" Height="350" Width="400">
     <Grid Margin="10">
         <StackPanel>
-            <Label Content="Document Name:"/>
-            <TextBox Text="{Binding Document.DocumentName}"/>
+            <Label Content="RenewalItem Name:"/>
+            <TextBox Text="{Binding SelectedRenewalItem.ItemName}"/>
 
-            <Label Content="Expiration Date:"/>
-            <DatePicker SelectedDate="{Binding Document.ExpirationDate}"/>
+            <Label Content="Date Of Renewal:"/>
+            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfRenewal}"/>
 
-            <Label Content="Renewal Date:"/>
-            <DatePicker SelectedDate="{Binding Document.RenewalDate}"/>
+            <Label Content="Expected Expiry Date:"/>
+            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfExpiry}"/>
 
             <Label Content="Renewal Cost:"/>
-            <TextBox Text="{Binding Document.RenewalCost}"/>
+            <TextBox Text="{Binding SelectedRenewalItem.Cost}"/>
             
             <Label Content="Notes:"/>
-            <TextBox Text="{Binding Document.Notes}"/>
+            <TextBox Text="{Binding SelectedRenewalItem.Notes}"/>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
                 <Button Content="Save" 

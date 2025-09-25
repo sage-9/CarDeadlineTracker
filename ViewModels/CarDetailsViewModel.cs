@@ -1,37 +1,77 @@
 using System.Collections.ObjectModel;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
+using System.Windows;
 using System.Windows.Input;
 using CarDeadlineTracker.Data;
 using CarDeadlineTracker.Model;
-using CarDeadlineTracker.ViewModels;
 using CarDeadlineTracker.Views;
+using Microsoft.EntityFrameworkCore;
+
+namespace CarDeadlineTracker.ViewModels;
 
 public class CarDetailsViewModel : ViewModelBase
 {
     // The main car object being displayed
     public Car SelectedCar { get; set; }
+    private RenewalItem _selectedRenewalItem;
+    public RenewalItem SelectedRenewalItem
+    {
+        get => _selectedRenewalItem;
+        set
+        {
+            _selectedRenewalItem =value;
+            OnPropertyChanged();
+        }
+    }
+    
+    private RepairLog _selectedRepairLog;
 
+    public RepairLog SelectedRepairLog
+    {
+        get => _selectedRepairLog;
+        set
+        {
+            _selectedRepairLog =value;
+            OnPropertyChanged();
+        }
+    }
     // Observable collections for the nested data
-    public ObservableCollection<Document> Documents { get; set; } = new ObservableCollection<Document>();
-    public ObservableCollection<MaintenanceRecord> MaintenanceRecords { get; set; } = new ObservableCollection<MaintenanceRecord>();
+    public ObservableCollection<RenewalItem> RenewalItems { get; set; } = new ObservableCollection<RenewalItem>();
     public ObservableCollection<RepairLog> RepairLogs { get; set; } = new ObservableCollection<RepairLog>();
     
     // Commands for managing the data
-    public ICommand AddDocumentCommand { get; }
-    public ICommand AddMaintenanceCommand { get; }
+    public ICommand AddRenewalItemCommand { get; }
+    public ICommand EditRenewalItemCommand { get; }
+    public  ICommand DeleteRenewalItemCommand { get; }
     public ICommand AddRepairCommand { get; }
+    public ICommand EditRepairCommand { get; }
+    public ICommand DeleteRepairCommand { get; }
+
+    
 
     // Constructor to load data for a specific car
     public CarDetailsViewModel(Car car)
     {
         SelectedCar = car;
         LoadCarDetails();
-
-        AddDocumentCommand = new RelayCommand(AddDocument);
-        AddMaintenanceCommand = new RelayCommand(AddMaintenance);
-        AddRepairCommand = new RelayCommand(AddRepair);
+        AddRenewalItemCommand = new RelayCommand(AddRenewalItem);
+        EditRenewalItemCommand = new RelayCommand(EditRenewalItem,CanEditRenewalItem);
+        DeleteRenewalItemCommand = new RelayCommand(DeleteRenewalItem, CanEditRenewalItem);
+        AddRepairCommand = new RelayCommand(AddRepairLog);
+        EditRepairCommand = new RelayCommand(EditRepairLog, CanEditRepair);
+        DeleteRepairCommand = new RelayCommand(DeleteRepairLog, CanEditRepair);
     }
+    
+    private bool CanEditRenewalItem(object parameter)
+    {
+        return SelectedRenewalItem != null;
+    }
+
+    private bool CanEditRepair(object parameter)
+    {
+        return SelectedRepairLog != null;
+    }
+
+    
 
     private void LoadCarDetails()
     {
@@ -39,23 +79,16 @@ public class CarDetailsViewModel : ViewModelBase
         {
             // Use .Include() to eagerly load the related data
             var carWithDetails = dbContext.Cars
-                .Include(c => c.Documents)
-                .Include(c => c.MaintenanceRecords)
+                .Include(c => c.RenewalItems)
                 .Include(c => c.RepairLogs)
                 .FirstOrDefault(c => c.NumberPlate == SelectedCar.NumberPlate);
 
             if (carWithDetails != null)
             {
-                Documents.Clear();
-                foreach (var doc in carWithDetails.Documents)
+                RenewalItems.Clear();
+                foreach (var doc in carWithDetails.RenewalItems)
                 {
-                    Documents.Add(doc);
-                }
-
-                MaintenanceRecords.Clear();
-                foreach (var maint in carWithDetails.MaintenanceRecords)
-                {
-                    MaintenanceRecords.Add(maint);
+                    RenewalItems.Add(doc);
                 }
 
                 RepairLogs.Clear();
@@ -68,38 +101,55 @@ public class CarDetailsViewModel : ViewModelBase
     }
     
     // Stub methods for the commands
-    private void AddDocument(object parameter)
+    private void AddRenewalItem(object parameter)
     {
-        var addDocumentWindow = new AddEditDocumentView();
+        var addRenewalItemWindow = new AddEditRenewalItemView();
     
         // Pass the car's number plate to the new view model
-        var viewModel = new AddEditDocumentViewModel(SelectedCar.NumberPlate);
+        var viewModel = new AddEditRenewalItemViewModel(SelectedCar.NumberPlate);
     
-        addDocumentWindow.DataContext = viewModel;
+        addRenewalItemWindow.DataContext = viewModel;
     
-        addDocumentWindow.ShowDialog();
+        addRenewalItemWindow.ShowDialog();
     
         // Reload the car details to display the newly added document
         LoadCarDetails();
     }
-    private void AddMaintenance(object parameter)
+    
+    private void EditRenewalItem(object parameter)
     {
-        var addMaintenanceWindow = new AddEditMaintenanceView();
-    
-        // Pass the car's number plate to the new view model
-        var viewModel = new AddEditMaintenanceViewModel(SelectedCar.NumberPlate);
-    
-        addMaintenanceWindow.DataContext = viewModel;
-    
-        addMaintenanceWindow.ShowDialog();
-    
-        // Reload the car details to display the newly added document
+        if(SelectedRenewalItem == null) return;
+        var editRenewalItemWindow = new AddEditRenewalItemView();
+        var viewModel = new AddEditRenewalItemViewModel(SelectedCar.NumberPlate,SelectedRenewalItem);
+        editRenewalItemWindow.DataContext = viewModel;
+        editRenewalItemWindow.ShowDialog();
         LoadCarDetails();
     }
-    private void AddRepair(object parameter) 
+
+    private void DeleteRenewalItem(object parameter)
+    {
+        if(SelectedRenewalItem == null) return;
+        var result = MessageBox.Show($"Are you sure you want to delete this {SelectedRenewalItem}?", 
+            "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                // The key part of the DELETE operation
+                dbContext.RenewalItems.Remove(SelectedRenewalItem);
+                dbContext.SaveChanges();
+            }
+            // Refresh the UI list
+            LoadCarDetails();
+        }
+    }
+    
+    
+    private void AddRepairLog(object parameter) 
     {
         var addRepairWindow = new AddEditRepairView();
-    
+                       
         // Pass the car's number plate to the new view model
         var viewModel = new AddEditRepairViewModel(SelectedCar.NumberPlate);
     
@@ -109,5 +159,33 @@ public class CarDetailsViewModel : ViewModelBase
     
         // Reload the car details to display the newly added document
         LoadCarDetails();
+    }
+    private void EditRepairLog(object parameter)
+    {
+        if(SelectedRepairLog == null) return;
+        var editRepairLogWindow = new AddEditRepairView();
+        var viewModel = new AddEditRepairViewModel(SelectedCar.NumberPlate,SelectedRepairLog);
+        editRepairLogWindow.DataContext = viewModel;
+        editRepairLogWindow.ShowDialog();
+        LoadCarDetails();
+    }
+
+    private void DeleteRepairLog(object parameter)
+    {
+        if(SelectedRepairLog == null) return;
+        var result = MessageBox.Show($"Are you sure you want to delete this {SelectedRepairLog}?", 
+            "Confirm Deletion", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            using (var dbContext = new ApplicationDbContext())
+            {
+                // The key part of the DELETE operation
+                dbContext.RepairLogs.Remove(SelectedRepairLog);
+                dbContext.SaveChanges();
+            }
+            // Refresh the UI list
+            LoadCarDetails();
+        }
     }
 }

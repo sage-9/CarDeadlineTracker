@@ -3,9 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:CarDeadlineTracker.Views"
         mc:Ignorable="d"
-        Title="Add/Edit Car" Height="300" Width="400">
+        Title="Add/Edit Car" Height="350" Width="400">
     <Grid>
         <StackPanel Margin="20">
             <Label Content="Number Plate:"/>
@@ -16,6 +15,9 @@
 
             <Label Content="Make:"/>
             <TextBox Text="{Binding Car.Make}"/>
+            
+            <Label Content="Mileage:"/>
+            <TextBox Text="{Binding Car.Mileage}"/>
             
             <Label Content="Branch Location:"/>
             <TextBox Text="{Binding Car.BranchLocation}"/>

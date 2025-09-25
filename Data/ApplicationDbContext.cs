@@ -6,11 +6,10 @@ namespace CarDeadlineTracker.Data;
 public class ApplicationDbContext:DbContext
 {
     public DbSet<Car> Cars { get; set; }
-    public DbSet<Document> Documents { get; set; }
-    public DbSet<MaintenanceRecord> MaintenanceRecords { get; set; }
+    public DbSet<RenewalItem> RenewalItems { get; set; }
     public DbSet<RepairLog> RepairLogs { get; set; }
 
-    private string path =@"C:\Users\AbdulrahmanLadipo\RiderProjects\CarDeadlineTracker\car_manager.db";
+    private readonly string path =@"C:\Users\AbdulrahmanLadipo\RiderProjects\CarDeadlineTracker\car_manager.db";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -22,15 +21,10 @@ public class ApplicationDbContext:DbContext
         modelBuilder.Entity<Car>()
             .HasKey(c => c.NumberPlate);
         
-        modelBuilder.Entity<Document>()
+        modelBuilder.Entity<RenewalItem>()
             .HasOne(d => d.Car)
-            .WithMany(c => c.Documents)
+            .WithMany(c => c.RenewalItems)
             .HasForeignKey(d => d.CarNumberPlate);
-
-        modelBuilder.Entity<MaintenanceRecord>()
-            .HasOne(m => m.Car)
-            .WithMany(c => c.MaintenanceRecords)
-            .HasForeignKey(m => m.CarNumberPlate);
 
         modelBuilder.Entity<RepairLog>()
             .HasOne(r => r.Car)

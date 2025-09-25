@@ -1,4 +1,4 @@
-// ViewModels/AddEditDocumentViewModel.cs
+// ViewModels/AddEditRenewalItemViewModel.cs
 
 using System.Windows;
 using System.Windows.Input;
@@ -11,7 +11,6 @@ public class AddEditCarViewModel : ViewModelBase
 {
     private readonly bool _isEditing;
     public Car Car { get; set; }
-
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
 

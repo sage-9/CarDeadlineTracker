@@ -3,6 +3,7 @@ using System;
 using CarDeadlineTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarDeadlineTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925085200_correction")]
+    partial class correction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
@@ -55,10 +58,10 @@ namespace CarDeadlineTracker.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateOfExpiry")
+                    b.Property<DateOnly>("DateOfExpiry")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateOfRenewal")
+                    b.Property<DateOnly>("DateOfRenewal")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ItemName")
@@ -93,7 +96,7 @@ namespace CarDeadlineTracker.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("RepairDate")
+                    b.Property<DateOnly>("RepairDate")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("RepairDescription")
