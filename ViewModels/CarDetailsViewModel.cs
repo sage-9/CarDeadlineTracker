@@ -39,6 +39,7 @@ public class CarDetailsViewModel : ViewModelBase
     public ObservableCollection<RepairLog> RepairLogs { get; set; } = new ObservableCollection<RepairLog>();
     
     // Commands for managing the data
+    public ICommand ToggleDoneCommand { get; }
     public ICommand AddRenewalItemCommand { get; }
     public ICommand EditRenewalItemCommand { get; }
     public  ICommand DeleteRenewalItemCommand { get; }
@@ -59,6 +60,7 @@ public class CarDetailsViewModel : ViewModelBase
         AddRepairCommand = new RelayCommand(AddRepairLog);
         EditRepairCommand = new RelayCommand(EditRepairLog, CanEditRepair);
         DeleteRepairCommand = new RelayCommand(DeleteRepairLog, CanEditRepair);
+        ToggleDoneCommand = new RelayCommand(ToggleDocumentDone);
     }
     
     private bool CanEditRenewalItem(object parameter)
@@ -96,6 +98,19 @@ public class CarDetailsViewModel : ViewModelBase
                 {
                     RepairLogs.Add(repair);
                 }
+            }
+        }
+    }
+    
+    private void ToggleDocumentDone(object parameter)
+    {
+        if (parameter is RenewalItem documentToToggle)
+        {
+            // Save the change to the database
+            using (var dbContext = new ApplicationDbContext())
+            {
+                dbContext.RenewalItems.Update(documentToToggle);
+                dbContext.SaveChanges();
             }
         }
     }

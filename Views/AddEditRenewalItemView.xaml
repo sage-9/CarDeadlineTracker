@@ -8,13 +8,13 @@
             <TextBox Text="{Binding SelectedRenewalItem.ItemName}"/>
 
             <Label Content="Date Of Renewal:"/>
-            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfRenewal}"/>
+            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfRenewal}" IsEnabled="{Binding IsEditable}"/>
 
             <Label Content="Expected Expiry Date:"/>
-            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfExpiry}"/>
+            <DatePicker  SelectedDate="{Binding SelectedRenewalItem.DateOfExpiry}" />
 
             <Label Content="Renewal Cost:"/>
-            <TextBox Text="{Binding SelectedRenewalItem.Cost}"/>
+            <TextBox Text="{Binding SelectedRenewalItem.Cost}" PreviewTextInput="TextBox_PreviewTextInput"/>
             
             <Label Content="Notes:"/>
             <TextBox Text="{Binding SelectedRenewalItem.Notes}"/>

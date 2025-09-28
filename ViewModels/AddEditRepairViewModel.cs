@@ -7,7 +7,20 @@ namespace CarDeadlineTracker.ViewModels;
 
 public class AddEditRepairViewModel : ViewModelBase
 {
-    public RepairLog SelectedRepairLog { get; set; }
+    
+    private RepairLog _repairLog;
+    
+    public bool IsEditable => !_isEditing;
+
+    public RepairLog SelectedRepairLog
+    {
+        get => _repairLog;
+        set
+        {
+            _repairLog = value;
+            OnPropertyChanged();
+        }
+    }
     
     private readonly bool _isEditing;
     public string CarNumberPlate { get; set; }
@@ -17,8 +30,10 @@ public class AddEditRepairViewModel : ViewModelBase
 
     public AddEditRepairViewModel(string carNumberPlate)
     {
-        _isEditing=true;
+        SelectedRepairLog = new RepairLog();
+        _isEditing=false;
         CarNumberPlate = carNumberPlate;
+        SelectedRepairLog.RepairDate = DateTime.Today;
         SaveCommand = new RelayCommand(SaveRepairAndClose);
         CancelCommand = new RelayCommand(CancelAndClose);
     }
@@ -28,6 +43,8 @@ public class AddEditRepairViewModel : ViewModelBase
         _isEditing=true;
         SelectedRepairLog = selectedRepairLog;
         CarNumberPlate = selectedCarNumberPlate;
+        SelectedRepairLog.RepairDate = DateTime.Today;
+        
         SaveCommand = new RelayCommand(SaveRepairAndClose);
         CancelCommand = new RelayCommand(CancelAndClose);
     }

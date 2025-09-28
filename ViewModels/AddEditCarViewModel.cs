@@ -1,5 +1,3 @@
-// ViewModels/AddEditRenewalItemViewModel.cs
-
 using System.Windows;
 using System.Windows.Input;
 using CarDeadlineTracker.Data;
@@ -10,9 +8,25 @@ namespace CarDeadlineTracker.ViewModels;
 public class AddEditCarViewModel : ViewModelBase
 {
     private readonly bool _isEditing;
+
+    public bool IsEditable => !_isEditing;
     public Car Car { get; set; }
     public ICommand SaveCommand { get; }
     public ICommand CancelCommand { get; }
+    bool _isValid;
+    private string _validStatement; 
+    public string ValidStatement
+    {
+        get => _validStatement;
+        set
+        {
+           
+            _validStatement = value;
+            
+            OnPropertyChanged();
+        }
+    }
+
 
     public AddEditCarViewModel()
     {
@@ -30,8 +44,25 @@ public class AddEditCarViewModel : ViewModelBase
         CancelCommand = new RelayCommand(CancelAndClose);
     }
 
+    private void ValidateData(Car car)
+    { 
+        _isValid = true;
+       if(car.NumberPlate == null) _isValid = false;
+       if (car.BranchLocation == null) car.BranchLocation = "Lagos";
+       if (car.Brand == null) _isValid = false;
+       if (car.Make == null) _isValid = false;
+       if(car.Mileage == null) car.Mileage = 0;
+    }
+
     private void SaveCarAndClose(object parameter)
     {
+        ValidateData(Car);
+        if (!_isValid)
+        {
+            ValidStatement = "The data you entered is invalid";
+            return;
+        }
+        
         using (var dbContext = new ApplicationDbContext())
         {
             if (_isEditing)

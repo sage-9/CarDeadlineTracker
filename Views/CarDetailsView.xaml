@@ -1,7 +1,7 @@
 <Window x:Class="CarDeadlineTracker.Views.CarDetailsView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Car Details" Height="600" Width="800">
+        Title="Car Details" Height="600" Width="1000">
     <Grid Margin="10">
         <StackPanel>
             <TextBlock Text="{Binding SelectedCar.NumberPlate}" FontSize="24" FontWeight="Bold"/>
@@ -15,10 +15,19 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding ItemName}" Width="150"/>
-                                    <GridViewColumn Header="Renewal Date" DisplayMemberBinding="{Binding DateOfRenewal}" Width="150"/>
-                                    <GridViewColumn Header="Expiration Date" DisplayMemberBinding="{Binding DateOfExpiry}" Width="150"/>
+                                    <GridViewColumn Header="Renewal Date" DisplayMemberBinding="{Binding DateOfRenewal,StringFormat='{}{0:d}'}" Width="150"/>
+                                    <GridViewColumn Header="Expiration Date" DisplayMemberBinding="{Binding DateOfExpiry, StringFormat='{}{0:d}'}" Width="150"/>
                                     <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost}" Width="100"/>
                                     <GridViewColumn Header="Notes" DisplayMemberBinding="{Binding Notes}" Width="300"/>
+                                    <GridViewColumn Header="Done">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding IsDone, Mode=TwoWay}" 
+                                                          Command="{Binding DataContext.ToggleDoneCommand, RelativeSource={RelativeSource AncestorType=ListView}}" 
+                                                          CommandParameter="{Binding}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
                                 </GridView>
                             </ListView.View>
                         </ListView>
@@ -34,7 +43,7 @@
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding RepairName}" Width="150"/>
-                                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding RepairDate}" Width="150"/>
+                                    <GridViewColumn Header="Date" DisplayMemberBinding="{Binding RepairDate,StringFormat='{}{0:d}'}" Width="150"/>
                                     <GridViewColumn Header="Cost" DisplayMemberBinding="{Binding Cost}" Width="150"/>
                                     <GridViewColumn Header="Description" DisplayMemberBinding="{Binding RepairDescription}" Width="300"/>
                                     <GridViewColumn Header="Notes" DisplayMemberBinding="{Binding Notes}" Width="300"/>

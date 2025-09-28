@@ -9,13 +9,13 @@
             <TextBox Text="{Binding SelectedRepairLog.RepairName}"/>
             
             <Label Content="Date:"/>
-            <DatePicker SelectedDate="{Binding SelectedRepairLog.RepairDate}"/>
+            <DatePicker SelectedDate="{Binding SelectedRepairLog.RepairDate}" IsEnabled="{Binding IsEditable}"/>
             
             <Label Content="Description"/>
-            <TextBox Text="{Binding SelectedRepairLog.RepairDescription}"/>
+            <TextBox Text="{Binding SelectedRepairLog.RepairDescription}" />
             
             <Label Content="Cost"/>
-            <TextBox Text="{Binding SelectedRepairLog.Cost}"/>
+            <TextBox Text="{Binding SelectedRepairLog.Cost}" PreviewTextInput="TextBox_PreviewTextInput"/>
             
             <Label Content="Notes:"/>
             <TextBox Text="{Binding MaintenanceRecord.Notes}"/>

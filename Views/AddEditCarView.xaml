@@ -4,25 +4,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="Add/Edit Car" Height="350" Width="400">
+        Title="Add/Edit Car" Height="400" Width="500">
     <Grid>
         <StackPanel Margin="20">
             <Label Content="Number Plate:"/>
-            <TextBox Text="{Binding Car.NumberPlate}"/>
+            <TextBox Text="{Binding Car.NumberPlate}" IsEnabled="{Binding IsEditable}"/>
             
             <Label Content="Brand:"/>
-            <TextBox Text="{Binding Car.Brand}"/>
+            <TextBox Text="{Binding Car.Brand}" IsEnabled="{Binding IsEditable}"/>
 
             <Label Content="Make:"/>
-            <TextBox Text="{Binding Car.Make}"/>
+            <TextBox Text="{Binding Car.Make}" IsEnabled="{Binding IsEditable}"/>
             
             <Label Content="Mileage:"/>
-            <TextBox Text="{Binding Car.Mileage}"/>
-            
+            <TextBox Text="{Binding Car.Mileage}" PreviewTextInput="TextBox_PreviewTextInput"/>
+             
             <Label Content="Branch Location:"/>
             <TextBox Text="{Binding Car.BranchLocation}"/>
             
+            <TextBlock Text="{Binding ValidStatement}" FontSize="12" TextAlignment="Left" Foreground="Red "/>
+            
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+               
                 <Button Content="Save" 
                         Command="{Binding SaveCommand}" 
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}" 

@@ -8,6 +8,8 @@ public class RenewalItem
     public DateTime DateOfExpiry { get; set; }
     public decimal  Cost { get; set; }
     public string Notes { get; set; }
+    
+    public bool IsDone { get; set; }
 
     // Foreign key to the Car model
     public string CarNumberPlate { get; set; } 
