@@ -4,9 +4,25 @@
         Title="Car Details" Height="600" Width="1000">
     <Grid Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding SelectedCar.NumberPlate}" FontSize="24" FontWeight="Bold"/>
-            <TextBlock Text="{Binding SelectedCar.Make}" FontSize="18"/>
-            <TextBlock Text="{Binding SelectedCar.Brand}" FontSize="18" Margin="0,0,0,10"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <StackPanel>
+                        <TextBlock Text="{Binding SelectedCar.NumberPlate}" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding SelectedCar.Make}" FontSize="18"/>
+                        <TextBlock Text="{Binding SelectedCar.Brand}" FontSize="18" Margin="0,0,0,10"/>
+                    </StackPanel>
+                </Grid>
+                
+                <Grid Grid.Column="1" >
+                    <Button Content="Generate Summary" Command="{Binding GenerateSummaryCommand}" Height = "50" Width="200"  HorizontalAlignment="Right" Margin="0,10,0,10"/>
+                </Grid>
+                
+            </Grid>
+            
         
             <TabControl>
                 <TabItem Header="Renewal Items">

@@ -37,6 +37,9 @@ public class CarDetailsViewModel : ViewModelBase
     // Observable collections for the nested data
     public ObservableCollection<RenewalItem> RenewalItems { get; set; } = new ObservableCollection<RenewalItem>();
     public ObservableCollection<RepairLog> RepairLogs { get; set; } = new ObservableCollection<RepairLog>();
+
+    private List<RenewalItem> _renewalItems => RenewalItems.ToList();
+    private List<RepairLog> _repairLogs => RepairLogs.ToList();
     
     // Commands for managing the data
     public ICommand ToggleDoneCommand { get; }
@@ -46,6 +49,8 @@ public class CarDetailsViewModel : ViewModelBase
     public ICommand AddRepairCommand { get; }
     public ICommand EditRepairCommand { get; }
     public ICommand DeleteRepairCommand { get; }
+    
+    public ICommand GenerateSummaryCommand { get; }
 
     
 
@@ -53,6 +58,7 @@ public class CarDetailsViewModel : ViewModelBase
     public CarDetailsViewModel(Car car)
     {
         SelectedCar = car;
+        GenerateSummaryCommand = new RelayCommand(OpenSummaryWindow);
         LoadCarDetails();
         AddRenewalItemCommand = new RelayCommand(AddRenewalItem);
         EditRenewalItemCommand = new RelayCommand(EditRenewalItem,CanEditRenewalItem);
@@ -62,7 +68,16 @@ public class CarDetailsViewModel : ViewModelBase
         DeleteRepairCommand = new RelayCommand(DeleteRepairLog, CanEditRepair);
         ToggleDoneCommand = new RelayCommand(ToggleDocumentDone);
     }
-    
+
+    private void OpenSummaryWindow(object parameter)
+    {
+        var ViewModel = new GenerateSummaryViewModel(_renewalItems,_repairLogs);
+        var View = new GenerateSummaryView();
+        
+        View.DataContext = ViewModel;
+        View.ShowDialog();
+    }
+
     private bool CanEditRenewalItem(object parameter)
     {
         return SelectedRenewalItem != null;
@@ -99,6 +114,7 @@ public class CarDetailsViewModel : ViewModelBase
                     RepairLogs.Add(repair);
                 }
             }
+            
         }
     }
     

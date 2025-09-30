@@ -10,8 +10,7 @@ namespace CarDeadlineTracker.ViewModels;
 
 public class MainViewModel : ViewModelBase
 {
-    private Model.Car _selectedCar;
-
+    private Car _selectedCar;
     public ObservableCollection<Car> Cars { get; set; } = new ObservableCollection<Car>();
     public ObservableCollection<RenewalItem> UpcomingDeadlines { get; set; } = new ObservableCollection<RenewalItem>();
     public ObservableCollection<RenewalItem> OverdueDeadlines { get; set; } = new ObservableCollection<RenewalItem>();
@@ -22,7 +21,7 @@ public class MainViewModel : ViewModelBase
     public ICommand ViewCarCommand { get; }
     public ICommand EditCarCommand { get; }
 
-    public Model.Car SelectedCar
+    public Car SelectedCar
     {
         get => _selectedCar;
         set
@@ -31,6 +30,8 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged();
         }
     }
+
+    
 
     public MainViewModel()
     {
