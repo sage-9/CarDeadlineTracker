@@ -1,3 +1,5 @@
+using System.IO;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using CarDeadlineTracker.Model;
 
@@ -9,11 +11,23 @@ public class ApplicationDbContext:DbContext
     public DbSet<RenewalItem> RenewalItems { get; set; }
     public DbSet<RepairLog> RepairLogs { get; set; }
 
-    private readonly string path =@"C:\Users\AbdulrahmanLadipo\RiderProjects\CarDeadlineTracker\car_manager.db";
+    private readonly string _path;
+
+    public ApplicationDbContext()
+    {
+        // Get the directory where the application's executable (.exe) is located.
+        // This is the simplest and most common method for desktop apps.
+        string appDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        
+        // Combine the directory path with your database file name.
+        // This will create a path like: "C:\path\to\published\app\car_manager.db"
+        _path = Path.Combine(appDirectory, "car_manager.db");
+    }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite($"Data Source={path}");
+        // The Data Source now uses the dynamically generated path
+        optionsBuilder.UseSqlite($"Data Source={_path}");
     }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)

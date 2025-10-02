@@ -33,4 +33,10 @@
       </Page>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="car_manager.db">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

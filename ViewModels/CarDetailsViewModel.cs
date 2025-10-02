@@ -71,7 +71,7 @@ public class CarDetailsViewModel : ViewModelBase
 
     private void OpenSummaryWindow(object parameter)
     {
-        var ViewModel = new GenerateSummaryViewModel(_renewalItems,_repairLogs);
+        var ViewModel = new GenerateSummaryViewModel(SelectedCar,_renewalItems,_repairLogs);
         var View = new GenerateSummaryView();
         
         View.DataContext = ViewModel;
